@@ -22,13 +22,19 @@ buildscript {
         }
     }
 }*/
+
+
+
 repositories {
     mavenLocal()
+    jcenter()
     mavenCentral()
 }
 // extension for configuration
 
 plugins {
+    `java-library`
+    java
     val kotlinVersion = "1.3.21"
     kotlin("jvm") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.allopen") version kotlinVersion
@@ -37,6 +43,8 @@ plugins {
     id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
     id("io.spring.dependency-management") version "1.0.6.RELEASE"
 }
+
+
 
 allOpen {
     annotation("javax.persistence.Entity")
@@ -47,10 +55,11 @@ allOpen {
 dependencies {
     implementation(kotlin("stdlib"))
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("com.h2database:h2")
+    implementation("com.h2database:h2:1.4.197")
     implementation(kotlin("reflect"))
     implementation("org.telegram:telegrambots:4.1.2")
     implementation("io.github.microutils:kotlin-logging:1.6.24")
+    implementation("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation(kotlin("test"))
     testImplementation("org.jetbrains.spek:spek-api:1.1.5") {
         exclude(group = "org.jetbrains.kotlin")
@@ -59,7 +68,9 @@ dependencies {
         exclude(group = "org.junit.platform")
         exclude(group = "org.jetbrains.kotlin")
     }
-    implementation("org.springframework.boot:spring-boot-configuration-processor")
+}
+configure<JavaPluginConvention> {
+    sourceCompatibility = JavaVersion.VERSION_1_8
 }
 val compileKotlin: KotlinCompile by tasks
 compileKotlin.kotlinOptions {
