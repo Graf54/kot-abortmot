@@ -1,9 +1,5 @@
 package org.abormot.editor.button.impl
 
-import com.qbots.entity.logic.Button
-import com.qbots.handler.editor.button.ButtonEntityHandler
-import com.qbots.service.entity.logic.ButtonService
-import com.qbots.tool.ButtonUtil
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
 

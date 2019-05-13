@@ -1,12 +1,5 @@
 package org.abormot.editor.button.impl
 
-import com.qbots.entity.logic.Message
-import com.qbots.entity.standard.TFile
-import com.qbots.entity.standard.TFileList
-import com.qbots.handler.editor.button.ButtonEntityHandler
-import com.qbots.service.entity.logic.MessageService
-import com.qbots.service.entity.standard.TFileService
-import com.qbots.tool.bot.UpdateUtil
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
 
