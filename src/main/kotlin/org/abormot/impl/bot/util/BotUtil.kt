@@ -2,7 +2,7 @@ package org.abormot.impl.bot.util
 
 import mu.KotlinLogging
 import org.abormot.impl.db.Const
-import org.abormot.impl.db.Type
+import org.abormot.impl.db.FileType
 import org.abormot.impl.db.entity.logic.Button
 import org.abormot.impl.db.entity.standard.Location
 import org.abormot.impl.db.entity.standard.TFile
@@ -38,7 +38,7 @@ import java.util.*
 import java.util.stream.Collectors
 
 @Service
-class BotUtils(var bot: DefaultAbsSender, val messageService: MessageService, val keyboardService: KeyboardService) {
+class BotUtil(var bot: DefaultAbsSender, val messageService: MessageService, val keyboardService: KeyboardService) {
     private val logger = KotlinLogging.logger {}
 
     fun sendMessage(messgeId: Int, chatId: Long): Int {
@@ -107,7 +107,6 @@ class BotUtils(var bot: DefaultAbsSender, val messageService: MessageService, va
             val keyboardRow = KeyboardRow()
             val keyboardButton = KeyboardButton()
             keyboardButton.text = buttonFromDb.name
-            keyboardButton.requestContact = buttonFromDb.isRequestContact
             keyboardRow.add(keyboardButton)
             keyboard!!.keyboard.add(keyboardRow)
             return keyboard
@@ -298,23 +297,23 @@ class BotUtils(var bot: DefaultAbsSender, val messageService: MessageService, va
     fun sendFile(file: TFile, chatId: Long): Int {
         try {
             when (file.typeId) {
-                Type.FILE_PHOTO.id -> return bot.execute(SendPhoto()
+                FileType.FILE_PHOTO.id -> return bot.execute(SendPhoto()
                         .setChatId(chatId)
                         .setPhoto(file.link)
                 ).messageId!!
-                Type.FILE_DOCUMENT.id -> return bot.execute(SendDocument()
+                FileType.FILE_DOCUMENT.id -> return bot.execute(SendDocument()
                         .setChatId(chatId)
                         .setDocument(file.link)
                 ).messageId!!
-                Type.FILE_VIDEO.id -> return bot.execute(SendVideo()
+                FileType.FILE_VIDEO.id -> return bot.execute(SendVideo()
                         .setChatId(chatId)
                         .setVideo(file.link)
                 ).messageId!!
-                Type.FILE_AUDIO.id -> return bot.execute(SendAudio()
+                FileType.FILE_AUDIO.id -> return bot.execute(SendAudio()
                         .setChatId(chatId)
                         .setAudio(file.link)
                 ).messageId!!
-                Type.FILE_VOICE.id -> return bot.execute(SendVoice()
+                FileType.FILE_VOICE.id -> return bot.execute(SendVoice()
                         .setChatId(chatId)
                         .setVoice(file.link)
                 ).messageId!!

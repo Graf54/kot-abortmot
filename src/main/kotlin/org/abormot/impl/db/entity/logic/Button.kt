@@ -4,6 +4,7 @@ import org.abormot.impl.db.Const
 import javax.persistence.*
 
 @Entity
+@Cacheable
 class Button {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -12,7 +13,7 @@ class Button {
     var name: String = ""
     @Column(length = Const.MESSAGE)
     var url: String? = null
-    var isRequestContact: Boolean = false
-    var messageId = 0
+    @ManyToOne
+    var message: Message? = null
     var commandId: Int = 0
 }

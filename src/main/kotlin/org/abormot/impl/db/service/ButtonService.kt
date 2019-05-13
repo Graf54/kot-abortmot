@@ -31,8 +31,8 @@ class ButtonService(val buttonRepo: ButtonRepo) {
         return buttonRepo.countByName(buttonName) > 0
     }
 
-    fun getButton(updateMessageText: String): Button {
-        return getButton(updateMessageText)
+    fun getButton(updateMessageText: String): Button? {
+        return buttonRepo.findByName(updateMessageText).orElse(null)
     }
 
     fun getButton(update: Update): Button? {
@@ -42,7 +42,7 @@ class ButtonService(val buttonRepo: ButtonRepo) {
             inputtedText = update.callbackQuery.data.split(Const.SPLIT.toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()[0]
             updateMessage = update.callbackQuery.message
             try {
-                if (inputtedText != null && inputtedText!!.substring(0, 3) == Const.ID_MARK) {
+                if (inputtedText.substring(0, 3) == Const.ID_MARK) {
                     try {
                         val id = Integer.parseInt(inputtedText!!.split(Const.SPLIT.toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()[0].replace("/id".toRegex(), ""))
                         //                        inputtedText = ProviderRepo.getButtonRepo().findByButtonIdAndLang(id, LangService.getCurrentLang()).getName();

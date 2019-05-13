@@ -67,10 +67,6 @@ class KeyboardService {
                 val button = KeyboardButton()
                 val buttonText = buttonFromDb.name
                 button.text = buttonText
-                button.requestContact = buttonFromDb.isRequestContact
-                if (buttonFromDb.isRequestContact) {
-                    isRequestContact = true
-                }
                 keyboardRow.add(button)
             }
             keyboardRowList.add(keyboardRow)

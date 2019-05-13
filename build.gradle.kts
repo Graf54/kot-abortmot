@@ -12,8 +12,6 @@ buildscript {
         classpath("org.junit.platform:junit-platform-gradle-plugin:1.0.0")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$1.3.21")
     }
-
-
 }
 /*configure {
     filters {
@@ -22,8 +20,6 @@ buildscript {
         }
     }
 }*/
-
-
 
 repositories {
     mavenLocal()
@@ -44,22 +40,26 @@ plugins {
     id("io.spring.dependency-management") version "1.0.6.RELEASE"
 }
 
-
-
 allOpen {
     annotation("javax.persistence.Entity")
 }
 
 
-
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("com.h2database:h2:1.4.197")
     implementation(kotlin("reflect"))
     implementation("org.telegram:telegrambots:4.1.2")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.1.3.RELEASE")
+    implementation("org.springframework.boot:spring-boot-configuration-processor:2.1.3.RELEASE")
+    /*implementation("org.hibernate:hibernate-core:5.3.7.Final")
+    implementation("org.hibernate:hibernate-ehcache:5.3.7.Final"){
+        exclude(group = "net.sf.ehcache", module = "ehcache")
+    }
+    implementation("org.ehcache:ehcache:3.4.0")
+    implementation("javax.cache:cache-api")*/
+    /*implementation("org.hibernate:hibernate-entitymanager:5.3.7.Final")*/
+    implementation("com.h2database:h2:1.4.197")
     implementation("io.github.microutils:kotlin-logging:1.6.24")
-    implementation("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation(kotlin("test"))
     testImplementation("org.jetbrains.spek:spek-api:1.1.5") {
         exclude(group = "org.jetbrains.kotlin")
@@ -69,6 +69,7 @@ dependencies {
         exclude(group = "org.jetbrains.kotlin")
     }
 }
+
 configure<JavaPluginConvention> {
     sourceCompatibility = JavaVersion.VERSION_1_8
 }

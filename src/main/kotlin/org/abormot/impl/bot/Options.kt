@@ -7,17 +7,17 @@ import java.net.Authenticator
 import java.net.PasswordAuthentication
 
 @Component
-class Options(proxy: ConfigBot) : DefaultBotOptions() {
+class Options(configBot: ConfigBot) : DefaultBotOptions() {
     private val logger = KotlinLogging.logger {}
-    private val type: String = proxy.type
-    private val port: Int = proxy.port
-    private val host: String = proxy.host
+    private val type: String = configBot.type
+    private val port: Int = configBot.port
+    private val host: String = configBot.host
 
-    private val login: String = proxy.login
-    private val pass: String = proxy.pass
+    private val login: String = configBot.login
+    private val pass: String = configBot.pass
 
     init {
-        logger.info { "ConfigBot values: type - ${type}, address - ${host}:${port}, login/pass: ${login}/${pass}" }
+        logger.info { "ConfigBot values: type - $type, address - $host:$port, login/pass: $login/$pass" }
         val proxyType = ProxyType.valueOf(type)
         super.setProxyType(proxyType)
         super.setProxyPort(port)

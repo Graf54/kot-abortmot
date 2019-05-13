@@ -1,6 +1,7 @@
 package org.abormot.impl.db.service
 
 import mu.KotlinLogging.logger
+import org.abormot.impl.bot.util.UpdateUtil
 import org.abormot.impl.db.entity.standard.User
 import org.abormot.impl.db.entity.standard.UserLight
 import org.abormot.impl.db.entity.standard.UserStatus
@@ -9,16 +10,28 @@ import org.abormot.impl.db.repository.standard.UserRepo
 import org.abormot.impl.db.repository.standard.UserStatusRepo
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.telegram.telegrambots.meta.api.objects.Update
+import java.util.*
 
 @Service
 @Transactional
-class UserService(val userRepo: UserRepo, val userStatusRepo: UserStatusRepo, val statusRepo: StatusRepo, val statusService: StatusService) {
-    val log = logger{}
+class UserService(private val userRepo: UserRepo, private val userStatusRepo: UserStatusRepo, private val statusRepo: StatusRepo, private val statusService: StatusService) {
+    val log = logger {}
 
     val all: Iterable<User>
         get() = userRepo.findAll()
 
-
+    private fun getUser(update: Update): User {
+        val user = User()
+        val tUser = UpdateUtil.getUser(update)
+        user.chatId = tUser.id.toLong()
+        user.firstName = tUser.firstName
+        user.lastName = tUser.lastName
+        user.userName = tUser.userName
+        user.languageCode = tUser.languageCode
+        user.contactBot = Date()
+        return user
+    }
 
     fun isAdmin(chatId: Long): Boolean {
         return userStatusRepo.countByUser_ChatIdAndStatus_Id(chatId, 1) > 0
@@ -63,7 +76,8 @@ class UserService(val userRepo: UserRepo, val userStatusRepo: UserStatusRepo, va
     }
 
     fun countRegistersUsers(): Int {
-        return userRepo.countByPhoneNotNull()
+        return 0
+        //todo
     }
 
     fun countUser(): Int {
@@ -95,9 +109,7 @@ class UserService(val userRepo: UserRepo, val userStatusRepo: UserStatusRepo, va
         log.info("deleted statusId={} from {} users", statusId, count)
     }
 
-    fun findByPhone(phone: String): List<User> {
-        return userRepo.findTop30ByPhoneLikeIgnoreCaseOrderByChatId(phone)
-    }
+
 
     fun findByName(updateMessageText: String): List<User> {
         return userRepo.findTop30ByUserNameLikeIgnoreCaseOrderByChatId("%$updateMessageText%")

@@ -1,11 +1,11 @@
 package org.abormot.impl.bot
 
 import mu.KotlinLogging
-import org.abormot.impl.bot.util.BotUtils
+import org.abormot.api.Command
+import org.abormot.impl.bot.util.BotUtil
 import org.abormot.impl.bot.util.UpdateUtil
 import org.abormot.impl.db.entity.standard.User
 import org.abormot.impl.db.service.UserService
-import org.abormot.impl.logic.Command
 import org.abormot.impl.services.CommandService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Lazy
@@ -17,7 +17,7 @@ import java.util.*
 class UpdateHandlerImpl(val commandService: CommandService, val userService: UserService) {
     @Autowired
     @Lazy
-    var botUtils: BotUtils? = null
+    var botUtil: BotUtil? = null
 
     private val commandUserMap: MutableMap<Long, Command?> = HashMap()
     private val logger = KotlinLogging.logger {}
@@ -25,11 +25,11 @@ class UpdateHandlerImpl(val commandService: CommandService, val userService: Use
     fun handle(update: Update) {
         val chatId = UpdateUtil.getChatId(update)
         checkUser(update, chatId)
-        logger.info { "Get new - ${update}" }
+        logger.info("Get new - {}", UpdateUtil.updateToString(update))
         val command = getCommand(update, chatId)
         if (command == null) {
 
-            botUtils!!.sendMessage("Команда не найдена", chatId)
+            botUtil!!.sendMessage("Команда не найдена", chatId)
         } else {
             execute(command, update, chatId)
         }
@@ -37,7 +37,7 @@ class UpdateHandlerImpl(val commandService: CommandService, val userService: Use
 
 
     private fun checkUser(update: Update, chatId: Long) {
-        if (!userService!!.isRegistered(chatId)) {
+        if (!userService.isRegistered(chatId)) {
             userService.save(getUser(update))
         }
     }
@@ -55,7 +55,7 @@ class UpdateHandlerImpl(val commandService: CommandService, val userService: Use
     }
 
     private fun getCommand(update: Update, chatId: Long): Command? {
-        val command = commandService!!.getCommand(update) // check is new Command
+        val command = commandService.getCommand(update) // check is new Command
         return if (command != null) { // was created new Command
             commandUserMap[chatId] = command
             command
@@ -66,8 +66,8 @@ class UpdateHandlerImpl(val commandService: CommandService, val userService: Use
 
     private fun execute(command: Command, update: Update, chatId: Long) {
         command.execute(update)
-        if (command.isFinish) {
+        /*if (command.isFinish) {
             commandUserMap[chatId] = null
-        }
+        }*/
     }
 }
