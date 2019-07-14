@@ -1,6 +1,7 @@
 # kot-abortmot
 <br />В процессе создания.
-<a>Используется:
+<br />
+<br />Используется:
 <br />Kotlin
 <br />Spring JPA
 <br />Telegram bots api
